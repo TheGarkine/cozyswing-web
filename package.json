@@ -1,0 +1,7 @@
+{
+  "name": "cozyswing-web",
+  "private": true,
+  "scripts": {
+    "dev": "npx live-server --port=3000"
+  }
+}

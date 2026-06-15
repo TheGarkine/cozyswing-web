@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CozySwing – Last Minute Gifts</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+    <main class="workshops">
+        <h1>Forgot to Buy a Present?</h1>
+        <p>No worries — it happens to the best of us. Saturday morning is yours to explore Augsburg's Christmas shops, markets, and local stores. Here are some of our favourite spots nearby.</p>
+        <p>And when you're back, there'll be a gift wrapping station waiting — paper, ribbons, the works. Get everything sorted before the workshops start and nobody will ever know you left it to the last minute.</p>
+
+        <div id="gift-map"></div>
+
+        <div class="gift-section">
+            <h2><svg class="gift-pin gift-pin-local" viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24C24 5.4 18.6 0 12 0zm0 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12z"/></svg> Local's Favourites</h2>
+            <ul class="gift-list" id="gift-list-local"></ul>
+        </div>
+
+        <div class="gift-section">
+            <h2><svg class="gift-pin gift-pin-general" viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24C24 5.4 18.6 0 12 0zm0 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12z"/></svg> More Places Nearby</h2>
+            <ul class="gift-list" id="gift-list-general"></ul>
+        </div>
+    </main>
+    <script src="components.js"></script>
+    <script src="main.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Home base
+        const home = {
+            name: 'Hep Cat Club',
+            category: 'Start Here',
+            address: 'Viktoriastraße 3b',
+            lat: 48.3656,
+            lng: 10.8865,
+        };
+
+        // ---- Raphael's picks ----
+        const localPicks = [
+            {
+                name: "Ertl's Bittersüß",
+                category: 'Chocolate',
+                address: 'Vorderer Lech 18',
+                lat: 48.3668843,
+                lng: 10.9011584,
+                quote: "The best hot chocolate in Augsburg — and their handmade pralines make the perfect gift.",
+            },
+            {
+                name: 'Die Töpferei',
+                category: 'Pottery',
+                address: 'Weiße Gasse 5',
+                lat: 48.36744,
+                lng: 10.89984,
+                quote: "Beautiful handcrafted ceramics, every piece is unique. I always find something special here.",
+            },
+        ];
+
+        // ---- More places nearby ----
+        const generalPlaces = [
+            {
+                name: 'Rathausplatz',
+                category: 'Christmas Market',
+                address: 'Rathausplatz',
+                lat: 48.3687,
+                lng: 10.8975,
+            },
+            {
+                name: 'Thalia',
+                category: 'Books',
+                address: 'Annastraße 21-23',
+                lat: 48.3679756,
+                lng: 10.8964862,
+            },
+            {
+                name: 'vom Fass',
+                category: 'Oils, Vinegars & Spirits',
+                address: 'Philippine-Welser-Str. 20',
+                lat: 48.3680471,
+                lng: 10.896851,
+            },
+        ];
+
+        const allPlaces = [...localPicks, ...generalPlaces];
+
+        // Render helper
+        function renderList(listEl, places) {
+            places.forEach(p => {
+                const li = document.createElement('li');
+                let html = `<strong>${p.name}</strong> <span class="gift-category">${p.category}</span><br><span class="gift-address">${p.address}</span>`;
+                if (p.quote) {
+                    html += `<blockquote class="gift-quote">"${p.quote}"<cite>— Raphi</cite></blockquote>`;
+                }
+                li.innerHTML = html;
+                li.style.cursor = 'pointer';
+                li.addEventListener('click', () => map.setView([p.lat, p.lng], 17));
+                listEl.appendChild(li);
+            });
+        }
+
+        // Render home entry
+        const localList = document.getElementById('gift-list-local');
+        const generalList = document.getElementById('gift-list-general');
+
+        const homeLi = document.createElement('li');
+        homeLi.className = 'gift-home';
+        homeLi.innerHTML = `<strong>🏠 ${home.name}</strong> <span class="gift-category gift-category-home">${home.category}</span><br><span class="gift-address">${home.address}</span>`;
+        homeLi.style.cursor = 'pointer';
+        homeLi.addEventListener('click', () => map.setView([home.lat, home.lng], 16));
+        localList.appendChild(homeLi);
+
+        renderList(localList, localPicks);
+        renderList(generalList, generalPlaces);
+
+        // Init map — center on all points
+        const allPoints = [home, ...allPlaces];
+        const center = [
+            allPoints.reduce((s, p) => s + p.lat, 0) / allPoints.length,
+            allPoints.reduce((s, p) => s + p.lng, 0) / allPoints.length,
+        ];
+        const map = L.map('gift-map').setView(center, 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            maxZoom: 19,
+        }).addTo(map);
+
+        // Home marker with custom icon
+        const homeIcon = L.divIcon({
+            className: 'home-marker',
+            html: '🏠',
+            iconSize: [28, 28],
+            iconAnchor: [14, 14],
+        });
+        L.marker([home.lat, home.lng], { icon: homeIcon })
+            .addTo(map)
+            .bindPopup(`<strong>${home.name}</strong><br>${home.address}`);
+
+        // Colored marker helper
+        function coloredIcon(color) {
+            return L.divIcon({
+                className: 'colored-marker',
+                html: `<svg viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg" width="28" height="42"><path fill="${color}" stroke="#fff" stroke-width="1.5" d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24C24 5.4 18.6 0 12 0zm0 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12z"/></svg>`,
+                iconSize: [28, 42],
+                iconAnchor: [14, 42],
+                popupAnchor: [0, -36],
+            });
+        }
+
+        const localIcon = coloredIcon('#71002e');   // burgundy
+        const generalIcon = coloredIcon('#9ba0dd');  // lavender
+
+        // Local picks markers
+        localPicks.forEach(p => {
+            L.marker([p.lat, p.lng], { icon: localIcon })
+                .addTo(map)
+                .bindPopup(`<strong>${p.name}</strong><br>${p.category}<br>${p.address}`);
+        });
+
+        // General places markers
+        generalPlaces.forEach(p => {
+            L.marker([p.lat, p.lng], { icon: generalIcon })
+                .addTo(map)
+                .bindPopup(`<strong>${p.name}</strong><br>${p.category}<br>${p.address}`);
+        });
+    </script>
+</body>
+</html>
