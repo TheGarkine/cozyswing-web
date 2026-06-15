@@ -227,6 +227,44 @@ body {
     margin-bottom: 0;
 }
 
+/* ---- Venue page ---- */
+
+.venue-gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.venue-photo {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.venue-credit {
+    font-size: 0.85rem;
+    color: #777;
+}
+
+.venue-credit a {
+    color: var(--color-burgundy);
+    text-decoration: underline;
+    text-decoration-color: var(--color-lavender);
+    text-underline-offset: 3px;
+}
+
+.venue-credit a:hover {
+    color: var(--color-lavender);
+}
+
+@media (max-width: 767px) {
+    .venue-gallery {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* ---- Gift map ---- */
 
 #gift-map {

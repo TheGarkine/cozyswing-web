@@ -12,6 +12,7 @@ function renderHeader() {
         { href: 'index.html', label: 'Home' },
         { href: 'staff.html', label: 'Staff' },
         { href: 'workshops.html', label: 'Workshops' },
+        { href: 'venue.html', label: 'Venue' },
         { href: 'schedule.html', label: 'Schedule' },
         { href: 'registration.html', label: 'Registration' },
         { href: 'gifts.html', label: '🎁' },
