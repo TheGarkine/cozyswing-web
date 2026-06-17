@@ -14,7 +14,7 @@ function renderHeader() {
         { href: 'workshops.html', label: 'Workshops' },
         { href: 'venue.html', label: 'Venue' },
         { href: 'schedule.html', label: 'Schedule' },
-        { href: 'registration.html', label: 'Registration' },
+        // { href: 'registration.html', label: 'Registration' },
         { href: 'gifts.html', label: '🎁' },
     ];
 

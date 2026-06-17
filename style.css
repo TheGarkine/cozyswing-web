@@ -169,6 +169,17 @@ body {
     color: var(--color-off-white);
 }
 
+.home-cta-placeholder {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.85rem 2rem;
+    background: var(--color-off-black);
+    color: var(--color-off-white);
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 6px;
+}
+
 .home-section {
     margin-top: 2.5rem;
     padding-top: 2rem;
