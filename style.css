@@ -13,6 +13,7 @@
 
 body {
     font-family: system-ui, -apple-system, sans-serif;
+    font-size: 1.1rem;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -181,9 +182,51 @@ body {
 }
 
 .home-section {
+    position: relative;
     margin-top: 2.5rem;
     padding-top: 2rem;
     border-top: 1px solid #ccc;
+}
+
+/* ---- Decorative cat heads peeking over lines ---- */
+
+.cat-peek {
+    position: absolute;
+    top: -48px;
+    left: 80px;
+    width: 55px;
+    height: 48px;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.cat-peek img {
+    width: 100%;
+    display: block;
+}
+
+.cat-peek-flip {
+    left: auto;
+    right: 60px;
+}
+
+.cat-peek-flip img {
+    transform: scaleX(-1);
+}
+
+.cat-peek-right {
+    left: auto;
+    right: 120px;
+}
+
+.cat-peek-right img {
+    transform: rotate(5deg);
+}
+
+@media (max-width: 768px) {
+    .cat-peek {
+        display: none;
+    }
 }
 
 .home-section h2 {
