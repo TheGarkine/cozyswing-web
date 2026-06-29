@@ -38,15 +38,16 @@
             lng: 10.8865,
         };
 
-        // ---- Raphael's picks ----
+        // ---- Local's Favourites (with recommender) ----
         const localPicks = [
+            // Raphi
             {
                 name: "Ertl's Bittersüß",
                 category: 'Chocolate',
                 address: 'Vorderer Lech 18',
                 lat: 48.3668843,
                 lng: 10.9011584,
-                quote: "The best hot chocolate in Augsburg — and their handmade pralines make the perfect gift.",
+                by: 'Raphi',
             },
             {
                 name: 'Die Töpferei',
@@ -54,11 +55,129 @@
                 address: 'Weiße Gasse 5',
                 lat: 48.36744,
                 lng: 10.89984,
-                quote: "Beautiful handcrafted ceramics, every piece is unique. I always find something special here.",
+                by: 'Raphi',
+            },
+            // Anna
+            {
+                name: 'Berghütte',
+                category: 'Restaurant & Bar',
+                address: 'Predigerberg 14',
+                lat: 48.3642707,
+                lng: 10.9010844,
+                by: 'Anna',
+            },
+            {
+                name: 'Dichtl',
+                category: 'Confiserie & Café',
+                address: 'Schrannenstraße 2',
+                lat: 48.3660209,
+                lng: 10.8909087,
+                by: 'Anna',
+            },
+            {
+                name: 'Weltladen',
+                category: 'Fair Trade',
+                address: 'Weiße Gasse 3',
+                lat: 48.3675136,
+                lng: 10.8996774,
+                by: 'Anna',
+            },
+            // Erik
+            {
+                name: "Mullu's",
+                category: 'Streetwear & Boards',
+                address: 'Karlstraße 2',
+                lat: 48.3707193,
+                lng: 10.8974251,
+                by: 'Erik',
+            },
+            {
+                name: 'Siller & Laar',
+                category: 'Lifestyle',
+                address: 'Philippine-Welser-Str. 30',
+                lat: 48.3674129,
+                lng: 10.8972328,
+                by: 'Erik',
+            },
+            {
+                name: 'Kolonial',
+                category: 'Cookbooks & Wine',
+                address: 'Mittlerer Lech 2',
+                lat: 48.3692954,
+                lng: 10.9000746,
+                by: 'Erik',
+            },
+            {
+                name: 'Zeugplatz Christkindlesmarkt',
+                category: 'Christmas Market',
+                address: 'Zeugplatz',
+                lat: 48.3662693,
+                lng: 10.8970203,
+                by: 'Erik',
+            },
+            {
+                name: 'Fahrrad Dynamo',
+                category: 'Bicycles',
+                address: 'Oberer Graben 27',
+                lat: 48.3683322,
+                lng: 10.9027187,
+                by: 'Erik',
+            },
+            // Beans
+            {
+                name: 'Dear Goods',
+                category: 'Sustainable Fashion',
+                address: 'Frauentorstraße 7',
+                lat: 48.3737792,
+                lng: 10.8962329,
+                by: 'Beans',
+            },
+            // Mel
+            {
+                name: 'Bücher Pustet',
+                category: 'Books',
+                address: 'Annastraße 4',
+                lat: 48.3695468,
+                lng: 10.8960080,
+                by: 'Mel',
+            },
+            // Lexi
+            {
+                name: "'s Fachl",
+                category: 'Local Vendors',
+                address: 'Am Perlachberg 5',
+                lat: 48.3696045,
+                lng: 10.8989005,
+                by: 'Lexi',
+            },
+            // Sophie
+            {
+                name: 'Pinu',
+                category: 'Design & Gifts',
+                address: 'Weiße Gasse 10',
+                lat: 48.3674822,
+                lng: 10.9002553,
+                by: 'Sophie',
+            },
+            {
+                name: 'Motel a Miio',
+                category: 'Ceramics',
+                address: 'Philippine-Welser-Str. 9',
+                lat: 48.3680876,
+                lng: 10.8972577,
+                by: 'Sophie',
+            },
+            {
+                name: 'Wolkenbilder',
+                category: 'Art & Prints',
+                address: 'Maximilianstraße 33',
+                lat: 48.3671394,
+                lng: 10.8989747,
+                by: 'Sophie',
             },
         ];
 
-        // ---- More places nearby ----
+        // ---- More places nearby (no recommender) ----
         const generalPlaces = [
             {
                 name: 'Rathausplatz',
@@ -66,6 +185,27 @@
                 address: 'Rathausplatz',
                 lat: 48.3687,
                 lng: 10.8975,
+            },
+            {
+                name: 'Søstrene Grene',
+                category: 'Home & Lifestyle',
+                address: 'Annastraße 39',
+                lat: 48.3670339,
+                lng: 10.8952183,
+            },
+            {
+                name: 'Stadtmarkt',
+                category: 'Market Hall',
+                address: 'Fuggerstraße 12a',
+                lat: 48.3683375,
+                lng: 10.8949447,
+            },
+            {
+                name: 'City Galerie',
+                category: 'Shopping Mall',
+                address: 'Willy-Brandt-Platz 1',
+                lat: 48.3655443,
+                lng: 10.9075369,
             },
             {
                 name: 'Thalia',
@@ -81,6 +221,13 @@
                 lat: 48.3680471,
                 lng: 10.896851,
             },
+            {
+                name: 'WMF',
+                category: 'Kitchenware',
+                address: 'Maximilianstraße 16',
+                lat: 48.3676416,
+                lng: 10.8978881,
+            },
         ];
 
         const allPlaces = [...localPicks, ...generalPlaces];
@@ -89,10 +236,11 @@
         function renderList(listEl, places) {
             places.forEach(p => {
                 const li = document.createElement('li');
-                let html = `<strong>${p.name}</strong> <span class="gift-category">${p.category}</span><br><span class="gift-address">${p.address}</span>`;
-                if (p.quote) {
-                    html += `<blockquote class="gift-quote">"${p.quote}"<cite>— Raphi</cite></blockquote>`;
+                let html = `<strong>${p.name}</strong> <span class="gift-category">${p.category}</span>`;
+                if (p.by) {
+                    html += ` <span class="gift-by">— ${p.by}</span>`;
                 }
+                html += `<br><span class="gift-address">${p.address}</span>`;
                 li.innerHTML = html;
                 li.style.cursor = 'pointer';
                 li.addEventListener('click', () => map.setView([p.lat, p.lng], 17));
